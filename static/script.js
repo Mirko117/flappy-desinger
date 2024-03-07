@@ -60,10 +60,12 @@ window.onload = function() {
     bottomPipeImg = new Image();
     bottomPipeImg.src = "static/images/bottompipe.png";
 
+    //load audio
+    nikad_neces_biti_gas = new Audio("static/audio/nikad_neces_biti_gas.mp3");
+    
     requestAnimationFrame(update);
     setInterval(placePipes, 1500); //every 1.5 seconds
-    document.addEventListener("keydown", moveBird);
-    document.addEventListener("click", moveBirdClick);
+    document.addEventListener("click", moveBird);
 }
 
 function update() {
@@ -110,7 +112,8 @@ function update() {
     context.fillText(score, 5, 45);
 
     if (gameOver) {
-        context.fillText("Izbubio si :(", 5, 90);
+        context.fillText("Izgubio si :(", 5, 90);
+        nikad_neces_biti_gas.play();
     }
 }
 
@@ -146,22 +149,8 @@ function placePipes() {
     pipeArray.push(bottomPipe);
 }
 
-function moveBird(e) {
-    if (e.code == "Space" || e.code == "ArrowUp") {
-        //jump
-        velocityY = -6;
 
-        //reset game
-        if (gameOver) {
-            bird.y = birdY;
-            pipeArray = [];
-            score = 0;
-            gameOver = false;
-        }
-    }
-}
-
-function moveBirdClick() {
+function moveBird() {
     //jump
     velocityY = -6;
 
@@ -170,7 +159,9 @@ function moveBirdClick() {
         bird.y = birdY;
         pipeArray = [];
         score = 0;
-        gameOver = false;
+        setTimeout(function() {
+            gameOver = false;
+        }, 500);
     }
 }
 
@@ -179,4 +170,12 @@ function detectCollision(a, b) {
            a.x + a.width > b.x &&   //a's top right corner passes b's top left corner
            a.y < b.y + b.height &&  //a's top left corner doesn't reach b's bottom left corner
            a.y + a.height > b.y;    //a's bottom left corner passes b's top left corner
+}
+
+var wait = (ms) => {
+    const start = Date.now();
+    let now = start;
+    while (now - start < ms) {
+      now = Date.now();
+    }
 }
