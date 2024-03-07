@@ -6,8 +6,8 @@ let boardHeight = 640;
 let context;
 
 //bird
-let birdWidth = 34; //width/height ratio = 408/228 = 17/12
-let birdHeight = 24;
+let birdWidth = 35;
+let birdHeight = 50;
 let birdX = boardWidth/8;
 let birdY = boardHeight/2;
 let birdImg;
@@ -36,6 +36,7 @@ let gravity = 0.4;
 
 let gameOver = false;
 let score = 0;
+let speed = 100;
 
 window.onload = function() {
     board = document.getElementById("board");
@@ -60,14 +61,19 @@ window.onload = function() {
     bottomPipeImg = new Image();
     bottomPipeImg.src = "static/images/bottompipe.png";
 
+    //load audio
+    nikad_neces_biti_gas = new Audio("static/audio/nikad_neces_biti_gas.mp3");
+    
     requestAnimationFrame(update);
     setInterval(placePipes, 1500); //every 1.5 seconds
-    document.addEventListener("keydown", moveBird);
-    document.addEventListener("click", moveBirdClick);
+    document.addEventListener("click", moveBird);
 }
 
 function update() {
-    requestAnimationFrame(update);
+    setTimeout(function(){
+        requestAnimationFrame(update);
+    }, 1000 / speed);
+
     if (gameOver) {
         return;
     }
@@ -110,7 +116,9 @@ function update() {
     context.fillText(score, 5, 45);
 
     if (gameOver) {
-        context.fillText("Izbubio si :(", 5, 90);
+        context.fillText("Nikad nećeš", 5, 90);
+        context.fillText("biti gas", 5, 135);
+        nikad_neces_biti_gas.play();
     }
 }
 
@@ -146,22 +154,8 @@ function placePipes() {
     pipeArray.push(bottomPipe);
 }
 
-function moveBird(e) {
-    if (e.code == "Space" || e.code == "ArrowUp") {
-        //jump
-        velocityY = -6;
 
-        //reset game
-        if (gameOver) {
-            bird.y = birdY;
-            pipeArray = [];
-            score = 0;
-            gameOver = false;
-        }
-    }
-}
-
-function moveBirdClick() {
+function moveBird() {
     //jump
     velocityY = -6;
 
@@ -170,13 +164,15 @@ function moveBirdClick() {
         bird.y = birdY;
         pipeArray = [];
         score = 0;
-        gameOver = false;
+        setTimeout(function() {
+            gameOver = false;
+        }, 500);
     }
 }
 
 function detectCollision(a, b) {
-    return a.x < b.x + b.width &&   //a's top left corner doesn't reach b's top right corner
-           a.x + a.width > b.x &&   //a's top right corner passes b's top left corner
-           a.y < b.y + b.height &&  //a's top left corner doesn't reach b's bottom left corner
-           a.y + a.height > b.y;    //a's bottom left corner passes b's top left corner
+    return a.x < b.x + b.width - 5 &&       //a's top left corner doesn't reach b's top right corner
+           a.x + a.width - 5 > b.x &&   //a's top right corner passes b's top left corner
+           a.y < b.y + b.height - 5 &&      //a's top left corner doesn't reach b's bottom left corner
+           a.y + a.height - 5 > b.y;     //a's bottom left corner passes b's top left corner
 }
