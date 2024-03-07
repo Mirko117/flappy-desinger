@@ -116,7 +116,8 @@ function update() {
     context.fillText(score, 5, 45);
 
     if (gameOver) {
-        context.fillText("Izgubio si :(", 5, 90);
+        context.fillText("Nikad nećeš", 5, 90);
+        context.fillText("biti gas", 5, 135);
         nikad_neces_biti_gas.play();
     }
 }
@@ -170,8 +171,30 @@ function moveBird() {
 }
 
 function detectCollision(a, b) {
-    return a.x < b.x + b.width &&   //a's top left corner doesn't reach b's top right corner
-           a.x + a.width > b.x &&   //a's top right corner passes b's top left corner
-           a.y < b.y + b.height &&  //a's top left corner doesn't reach b's bottom left corner
-           a.y + a.height > b.y;    //a's bottom left corner passes b's top left corner
+    //calculate bounding boxes for both objects
+    let aBox = {
+        x: a.x - a.width * 0.15,  //adjusting bounding box
+        y: a.y + a.height * 0.15,
+        width: a.width * 0.7,
+        height: a.height * 0.7
+    };
+
+    let bBox = {
+        x: b.x,
+        y: b.y,
+        width: b.width * 0.7,
+        height: b.height
+    };
+
+    //check for collision between bounding boxes
+    if (aBox.x < bBox.x + bBox.width &&
+        aBox.x + aBox.width > bBox.x &&
+        aBox.y < bBox.y + bBox.height &&
+        aBox.y + aBox.height > bBox.y) {
+        //collision detected
+        return true;
+    }
+
+    //no collision detected
+    return false;
 }
