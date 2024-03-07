@@ -36,6 +36,7 @@ let gravity = 0.4;
 
 let gameOver = false;
 let score = 0;
+let speed = 100;
 
 window.onload = function() {
     board = document.getElementById("board");
@@ -69,7 +70,10 @@ window.onload = function() {
 }
 
 function update() {
-    requestAnimationFrame(update);
+    setTimeout(function(){
+        requestAnimationFrame(update);
+    }, 1000 / speed);
+
     if (gameOver) {
         return;
     }
