@@ -171,30 +171,8 @@ function moveBird() {
 }
 
 function detectCollision(a, b) {
-    //calculate bounding boxes for both objects
-    let aBox = {
-        x: a.x - a.width * 0.15,  //adjusting bounding box
-        y: a.y + a.height * 0.15,
-        width: a.width * 0.7,
-        height: a.height * 0.7
-    };
-
-    let bBox = {
-        x: b.x,
-        y: b.y,
-        width: b.width * 0.7,
-        height: b.height
-    };
-
-    //check for collision between bounding boxes
-    if (aBox.x < bBox.x + bBox.width &&
-        aBox.x + aBox.width > bBox.x &&
-        aBox.y < bBox.y + bBox.height &&
-        aBox.y + aBox.height > bBox.y) {
-        //collision detected
-        return true;
-    }
-
-    //no collision detected
-    return false;
+    return a.x < b.x + b.width - 5 &&       //a's top left corner doesn't reach b's top right corner
+           a.x + a.width - 5 > b.x &&   //a's top right corner passes b's top left corner
+           a.y < b.y + b.height - 5 &&      //a's top left corner doesn't reach b's bottom left corner
+           a.y + a.height - 5 > b.y;     //a's bottom left corner passes b's top left corner
 }
