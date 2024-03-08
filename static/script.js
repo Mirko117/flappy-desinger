@@ -40,6 +40,8 @@ let gravity = 0.4;
 let gameOver = false;
 let score = 0;
 let speed = 100;
+let isLoaded = 0;
+let toLoad = 0;
 
 window.onload = function() {
     board = document.getElementById("board");
@@ -59,21 +61,29 @@ window.onload = function() {
     }
 
     topPipeImg = new Image();
+    toLoad++;
     topPipeImg.src = "static/images/toppipe.png";
+    topPipeImg.addEventListener("load", function() {
+        isLoaded++;
+        hidePreloader();
+    });
 
     bottomPipeImg = new Image();
+    toLoad++;
     bottomPipeImg.src = "static/images/bottompipe.png";
+    bottomPipeImg.addEventListener("load", function() {
+        isLoaded++;
+        hidePreloader();
+    });
 
     //load audio
     nikad_neces_biti_gas = new Audio("static/audio/nikad_neces_biti_gas.mp3");
-
-    //hide preloader
-    document.getElementById("preloader").style.display = "none";
 
     context.fillStyle = "white";
     context.font="30px sans-serif";
     context.fillText("Pritisni da počneš", 5, 45);
 }
+
 
 document.addEventListener("click", function firstClick(){
     document.removeEventListener("click", firstClick);
@@ -86,6 +96,12 @@ function startGame() {
     requestAnimationFrame(update);
     setInterval(placePipes, 1500); //every 1.5 seconds
     document.addEventListener("click", moveBird);
+}
+
+function hidePreloader() {
+    if (isLoaded === 2) {
+        document.getElementById("preloader").style.display = "none";
+    }
 }
 
 function update() {
