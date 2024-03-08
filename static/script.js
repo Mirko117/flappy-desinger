@@ -29,6 +29,9 @@ let pipeY = 0;
 let topPipeImg;
 let bottomPipeImg;
 
+//audio
+let nikad_neces_biti_gas;
+
 //physics
 let velocityX = -2; //pipes moving left speed
 let velocityY = 0; //bird jump speed
@@ -63,7 +66,23 @@ window.onload = function() {
 
     //load audio
     nikad_neces_biti_gas = new Audio("static/audio/nikad_neces_biti_gas.mp3");
-    
+
+    //hide preloader
+    document.getElementById("preloader").style.display = "none";
+
+    context.fillStyle = "white";
+    context.font="30px sans-serif";
+    context.fillText("Pritisni da počneš", 5, 45);
+}
+
+document.addEventListener("click", function firstClick(){
+    document.removeEventListener("click", firstClick);
+    moveBird();
+    startGame();
+});
+
+
+function startGame() {
     requestAnimationFrame(update);
     setInterval(placePipes, 1500); //every 1.5 seconds
     document.addEventListener("click", moveBird);
