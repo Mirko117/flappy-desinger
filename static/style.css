@@ -1,10 +1,11 @@
 body {
     font-family:'Courier New', Courier, monospace;
     text-align: center;
+	padding: 0;
+	margin: 0;
 }
 
 #board {
-    /* background-color: skyblue; */
     background-image: url("./images/flappybirdbg.png");
 }
 
@@ -14,15 +15,18 @@ body {
 	background-color: white;
 	position: absolute;
 	text-align: center;
+	padding-top: 20px;
 }
 
 @media (max-width: 360px){
-	*{
-		margin: 0;
-		padding: 0;
-	}
 	#board{ 
-		width: 320px;
-		margin: 0 auto;
+		width: 100vw;
+		margin: auto;
+	}
+}
+
+@media (max-height: 640px){
+	#board{ 
+		height: 100vh;
 	}
 }
